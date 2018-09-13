@@ -2,14 +2,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>b4484e1f-3db3-4a51-9760-86c2bf1e7831</ProjectGuid>
+    <ProjectGuid>e2e5225c-cfb2-49ff-8b34-db68c53711e2</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>ID3.py</StartupFile>
-    <SearchPath>..\ML-01-DT</SearchPath>
+    <StartupFile>
+    </StartupFile>
+    <SearchPath>
+    </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>ML-01-DT</Name>
-    <RootNamespace>ML-01-DT</RootNamespace>
+    <Name>NLP-02-morphology</Name>
+    <RootNamespace>NLP-02-morphology</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,17 +22,17 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="assignment.py">
+    <Compile Include="morphology.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="data.py" />
-    <Compile Include="ID3.py" />
     <Compile Include="test.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="__init__.py">
-      <SubType>Code</SubType>
-    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="dict.txt" />
+    <Content Include="rules.txt" />
+    <Content Include="test.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

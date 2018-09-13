@@ -1,7 +1,7 @@
 import numpy as np
 
 train = pd.read_csv(DATA_DIR + 'train.csv')
-test = pd.read_csv(DATA_DIR + 'small_train.csv')
+Stest = pd.read_csv(DATA_DIR + 'small_train.csv')
 rules = [{'attr': ['smell', 'time'], 'value': ['none', 'two'], 'label': False},
  {'attr': ['smell', 'time'], 'value': ['none', 'one'], 'label': True},
  {'attr': ['smell', 'variety'], 'value': ['sweet', 'alp'], 'label': True},

@@ -1,12 +1,6 @@
-
 import numpy as np
 import pandas as pd
 import copy
-
-
-# Import & some CONST
-DATA_DIR = "C:/Users/Yu Zhu/OneDrive/Academy/the U/Assignment/AssignmentSln/ML-01-DT/experiment-data_new/data_new/"
-
 
 class ID3:
 
@@ -14,7 +8,7 @@ class ID3:
         pass
     
     # train_id3: training with ID3
-    def train_id3(self, train = None, fpath = '', max_depth = 500):
+    def train_id3(self, data = None, fpath = '', max_depth = 500, verbose = True):
 
         if not fpath and data is None:
             raise Exception("Must pass either a path to a data file or a pandas DataFrame object")    
@@ -24,16 +18,16 @@ class ID3:
         # tree: an empty element of trees
         # rules: final results!
         # attr_name: all attr names excluding the label
-        if train is None:
+        if data is None:
             self.train = pd.read_csv(fpath)
         else:
-            self.train = train
+            self.train = data
         trees = [] 
-        self.depth = 0
         self.tree = {'attr': [], 'value': [], 'parent_entropy': [], 'data': []} 
         self.rules = [] # 
         self.attr_name = set(self.train.columns[1:])
         self.max_depth = max_depth
+        self.verbose = verbose
 
         # if all labels are identical, return the label immediately
         unique_label = self.train['label'].value_counts()
@@ -45,10 +39,63 @@ class ID3:
         else:
             return self._grow_trees(trees)
 
-    # test_id3: test id3
-    def test_id3(self, test = None, fpath = ''):
 
-        if not fpath and test is None:
+    # grow_tree: a recursive implementation of ID3
+    def _grow_trees(self, trees):
+        
+        # if there's no root, generate root
+        if len(trees) == 0 and len(self.rules) == 0:
+            parent_tree = self.tree
+            parent_entropy = self._get_entropy(self.train['label'])
+            parent_attr = []
+            child_attr = self.attr_name
+            data = self.train
+
+            # new_node:  the attr with higest gain
+            new_node = self._get_win_attr(data, child_attr, parent_entropy)
+            trees.extend(self._update_parent_tree(parent_tree, new_node))
+        
+            return self._grow_trees(trees)
+
+        # if all possible trees have been found, quit
+        elif len(trees) == 0 and len(self.rules) > 0:
+            return
+     
+        # if trees are not empty, keep adding nodes
+        elif len(trees) > 0:
+            
+            new_trees = []
+            
+            for t in trees:
+
+                # print progress
+                if self.verbose:
+                    print('tree depth: %s,  # rules: %s' % (len(t['attr']), len(self.rules)))
+
+                # if not reach max, keep growing; otherwise, cut
+                if len(t['attr']) < self.max_depth:
+
+                    parent_tree = t
+                    parent_entropy = parent_tree['parent_entropy'][-1]
+                    parent_attr = set(parent_tree['attr'])
+                    child_attr = self.attr_name - parent_attr
+                    data = parent_tree['data']
+
+                    # new_node:  the attr with higest gain
+                    new_node = self._get_win_attr(data, child_attr, parent_entropy)
+                    new_trees.extend(self._update_parent_tree(parent_tree, new_node))
+
+                # if reach max, return
+                elif len(t['attr']) == self.max_depth:
+                    label = t['data']['label'].value_counts().index[0]
+                    self.rules.append({'attr': t['attr'], 'value': t['value'], 'label': label})
+
+            return self._grow_trees(new_trees)
+
+    # test_id3: test id3
+    def test_id3(self, data = None, fpath = ''):
+
+        if not fpath and data is None:
             raise Exception("Must pass either a path to a data file or a pandas DataFrame object")        
         
         if len(self.rules) == 0:
@@ -61,10 +108,10 @@ class ID3:
         # n_rules: # of rules
         # acc = n_hit / n_test
 
-        if test is None:
+        if data is None:
             self.test = pd.read_csv(fpath)
         else:
-            self.test = test
+            self.test = data
         rules = self.rules
         
         n_test = self.test.shape[0]
@@ -86,63 +133,9 @@ class ID3:
                     n_hit += 1
                     break
 
-            print('# %s / # %s' % (n_hit, i + 1))
+            #print('# %s / # %s' % (n_hit, i + 1))
 
         return n_hit / n_test
-
-
-    # grow_tree: a recursive implementation of ID3
-    def _grow_trees(self, trees):
-        
-        # if there's no root, generate root
-        if len(trees) == 0 and len(self.rules) == 0:
-            parent_tree = self.tree
-            parent_entropy = self._get_entropy(self.train['label'])
-            parent_attr = []
-            child_attr = self.attr_name
-            data = self.train
-
-            # new_node:  the attr with higest gain
-            new_node = self._get_win_attr(data, child_attr, parent_entropy)
-            trees.extend(self._update_parent_tree(parent_tree, new_node))
-        
-            # inc depth by 1
-            #self.depth = 1
-
-            return self._grow_trees(trees)
-
-        # if all possible trees have been found, quit
-        elif len(trees) == 0 and len(self.rules) > 0:
-            return
-     
-        # if trees are not empty, keep adding nodes
-        elif len(trees) > 0:
-            
-            new_trees = []
-            
-            # if not reach max, keep growing; otherwise, cut
-            for t in trees:
-                # print progress
-                print('tree depth: %s,  # rules: %s' % (len(t['attr']), len(self.rules)))
-
-                print(t['attr'])
-
-                if len(t['attr']) < self.max_depth:
-                    parent_tree = t
-                    parent_entropy = parent_tree['parent_entropy'][-1]
-                    parent_attr = set(parent_tree['attr'])
-                    child_attr = self.attr_name - parent_attr
-                    data = parent_tree['data']
-
-                    # new_node:  the attr with higest gain
-                    new_node = self._get_win_attr(data, child_attr, parent_entropy)
-                    new_trees.extend(self._update_parent_tree(parent_tree, new_node))
-
-                    return self._grow_trees(new_trees)
-
-                elif len(t['attr']) == self.max_depth:
-                    label = t['data']['label'].value_counts().index[0]
-                    self.rules.append({'attr': t['attr'], 'value': t['value'], 'label': label})
 
 
     # get_entropy: given a label (Series) or a subset of it, return its entropy (float)
@@ -202,12 +195,6 @@ class ID3:
                 new_parent_tree.append(parent)
 
         return new_parent_tree
-
-id3 = ID3()
-id3.train_id3(fpath = DATA_DIR + 'small_train.csv', max_depth = 9)
-id3.rules
-#acc = x.test_id3(fpath = DATA_DIR + 'test.csv') # acc = 1.0
-
 
 
 
