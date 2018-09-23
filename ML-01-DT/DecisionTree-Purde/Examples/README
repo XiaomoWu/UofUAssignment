@@ -1,0 +1,118 @@
+
+In order to become familiar with the DecisionTree module:
+
+
+  (1)    First run the 
+
+                construct_dt_and_classify_one_sample.py
+
+         script as it is.  
+
+         HIGHLY RECOMMENDED:  Always turn on the debug1 option
+                              on in the call to the constructor
+                              when experimenting with a training
+                              datafile for the first time.
+
+         Now modify the test sample in this script and see
+         what classification results you get for the new
+         test sample.  
+
+  (2)    The script in the above step uses the file
+         'training.dat' for the training data.  Study this
+         file carefully and make sure that your own training
+         data conforms to this file.  You can, of course,
+         use any names for the classes, the features, and
+         the feature values.  But your training datafile
+         MUST mention the names your classes, the names your
+         features, and the names of the values that the
+         features can take in the manner shown.
+
+  (3)    If you are using a large number of features or if the
+         number of possible values for the features is very
+         large, unless you take care, the tree you construct
+         could end up being much too large and much too slow
+         to construct.  To limit the size of the tree, you
+         may need to change the values of the following
+         constructor parameters in the previous steps:
+
+                    max_depth_desired
+
+                    entropy_threshold
+
+         The first parameter, max_depth_desired, controls
+         the depth of the tree from the root node, and the
+         second parameter, entropy_threshold, controls the
+         resolution in the entropy space.  The smaller the
+         value for the first parameter and the larger the
+         value for the second parameter, the smaller the
+         decision tree.  The largest possible value for
+         max_depth_desired is the number of features.  Take
+         it down from there to make the tree smaller.  The
+         smallest possible value for entropy_threshold is 0.
+         Take it up from there to make the tree smaller.
+
+  (4)    So far we have talked about classifying one data
+         vector at a time.  Let's now talk about classifying
+         all the data vectors in a test datafile in one go.
+         Whereas a training datafile must obviously declare the
+         class labels for each data vector, there will be no
+         class labels in a test datafile.  However, the 
+         your test datafile must correspond to a particular
+         format that is shown in 
+
+                   testdata.dat
+
+         in the Examples directory.  Examine this file and
+         and take note of the line that begins with
+
+               "Feature Order For Data:"
+
+         Your test datafile must supply this line and must
+         indicate the order in which the feature values are
+         to be read from the rest of the test datafile.
+
+
+  (5)    Finally, run the classifier on the test datafile by
+
+         classify_test_data_in_a_file.pl  training.dat  testdata2.dat  out.txt
+
+         Note carefully the three arguments you must supply the script.
+         The first is for where the training data is, the second for 
+         where the test data is, and the last where the classification 
+         results will be deposited.
+
+
+=======================================================================
+
+
+FOR THE CASE OF VERY LARGE DECISION TREES:
+
+
+   Large decision trees can take a very long time to create.
+   If that is the case with your application, having to
+   create afresh a decision tree every time you want to
+   classify something can quickly become tiresome.  If such
+   is the case with your application, consider storing your
+   decision tree in a diskfile.  Subsequently, you can use
+   the disk-stored decision tree for your classification
+   work.  The following scripts in this directory:
+
+         store_dt_on_disk.py
+
+         classify_from_diskstored_dt.py
+
+  show you how you can do that.
+
+
+=======================================================================
+
+
+GENERATING SYNTHETIC TRAINING AND TEST DATA:
+
+  If you want to generate synthetic training and test data,
+  you can use the author's Perl module
+  Algorithm:DecisionTree, version 1.41 or above.  This
+  module can be downloaded from the CPAN archives.  See the
+  examples directory of that module for how to generate
+  training and test data.
+

@@ -1,26 +1,25 @@
+import sys
 import copy
 
-DATA_DIR = 'C:/Users/Yu Zhu/OneDrive/Academy/the U/Assignment/AssignmentSln/NLP-02-morphology/'
-
 class PARSER:
-    def __init__(self):
-        self.dict = self._get_dict()
-        self.rules = self._get_rules()
-        self.test = self._get_test()
+    def __init__(self, dict_path, rules_path, test_path):
+        self.dict = self._get_dict(dict_path)
+        self.rules = self._get_rules(rules_path)
+        self.test = self._get_test(test_path)
         
     # main parse method
     def parse(self):
 
         for word in self.test:
             self.output = set()
-            self._parse_one(word)
+            self.parse_one(word)
             self._format_output()
             for o in self.output:
                 print(o)
             print()
 
     # main method called by parse
-    def _parse_one(self, word):
+    def parse_one(self, word):
         dict_match = self._search_dict(word)
         
         # IN dict
@@ -84,10 +83,10 @@ class PARSER:
                          self._analyzer(parent_new)
             
 
-    # _search_rules: look up the rules, return {'pos', 'word_new', 'pos_new'}
+    # _search_rules: look up the rules, return a list
     def _search_rules(self, word):
         rule_match = []
-        for rule in rules:
+        for rule in self.rules:
             type = rule['type']
             affix = rule['affix']
             affix_n = len(affix)
@@ -110,7 +109,7 @@ class PARSER:
         return rule_match
 
     
-    # _search_dict: look up dict, return a list of (True, matched), or (False, original)
+    # _search_dict: look up dict, return a list
     def _search_dict(self, word):
         dict_match = []
 
@@ -122,8 +121,8 @@ class PARSER:
 
 
     # import rules
-    def _get_rules(self):
-        with open(DATA_DIR + 'rules.txt') as f:
+    def _get_rules(self, fpath):
+        with open(fpath) as f:
             lines = f.readlines()
         rules = []
         for line in lines:
@@ -135,8 +134,8 @@ class PARSER:
         return rules
 
     # import dict
-    def _get_dict(self):
-        with open(DATA_DIR + 'dict.txt') as f:
+    def _get_dict(self, fpath):
+        with open(fpath) as f:
             lines = f.readlines()
         dict = []
         for line in lines:
@@ -150,8 +149,8 @@ class PARSER:
         return dict
 
     # import test
-    def _get_test(self):
-        with open(DATA_DIR + 'test.txt') as f:
+    def _get_test(self, fpath):
+        with open(fpath) as f:
             return [line.strip() for line in f.readlines()]
 
     # format output
@@ -161,8 +160,17 @@ class PARSER:
             self.output = [o for o in output if o.find('SOURCE=default') < 0]
 
 
+path = 'C:/Users/Yu Zhu/OneDrive/Academy/the U/Assignment/AssignmentSln/NLP-02-morphology/'
 
-
-x = PARSER()
+x = PARSER(path + 'dict.txt', path + 'rules.txt', path + 'small_test.txt')
 x.parse()
 
+
+#if __name__ == '__main__':
+#    args = sys.argv 
+#    dict_path = args[1]
+#    rules_path = args[2]
+#    test_path = args[3]
+    
+#    x = PARSER(dict_path, rules_path, test_path)
+#    x.parse()

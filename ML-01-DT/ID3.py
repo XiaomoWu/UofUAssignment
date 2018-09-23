@@ -128,8 +128,7 @@ class ID3:
                 rule = rules[j]
                 #print('j:', j)
 
-                if obs['label'] == rule['label'] \
-                    and all(obs.loc[rule['attr']] == rule['value']):
+                if obs['label'] == rule['label'] and all(obs.loc[rule['attr']] == rule['value']):
                     n_hit += 1
                     break
 
@@ -196,6 +195,7 @@ class ID3:
 
         return new_parent_tree
 
-
-
+data_dir = "C:/Users/Yu Zhu/OneDrive/Academy/the U/Assignment/AssignmentSln/ML-01-DT/"
+tree = ID3()
+tree.train_id3(fpath = data_dir + 'train.csv')
 

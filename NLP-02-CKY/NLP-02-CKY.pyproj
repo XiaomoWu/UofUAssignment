@@ -2,15 +2,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>b4484e1f-3db3-4a51-9760-86c2bf1e7831</ProjectGuid>
+    <ProjectGuid>8fe88901-c363-42db-8024-89e7a4e22022</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>ID3.py</StartupFile>
+    <StartupFile>cky.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>ML-01-DT</Name>
-    <RootNamespace>ML-01-DT</RootNamespace>
+    <Name>NLP-02-CKY</Name>
+    <RootNamespace>NLP-02-CKY</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,20 +21,16 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="assignment.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="data.py" />
-    <Compile Include="ID3.py" />
-    <Compile Include="ID3New.py">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="cky.py" />
     <Compile Include="test.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="__init__.py">
-      <SubType>Code</SubType>
-    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="cky-prob.trace" />
+    <Content Include="cky.trace" />
+    <Content Include="pcfg.txt" />
+    <Content Include="sentences.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
