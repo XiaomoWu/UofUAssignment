@@ -9,6 +9,8 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "NLP-01-morphology", "NLP-01
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "NLP-02-CKY", "NLP-02-CKY\NLP-02-CKY.pyproj", "{8FE88901-C363-42DB-8024-89E7A4E22022}"
 EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ML-02-Perceptron", "ML-02-Perceptron\ML-02-Perceptron.pyproj", "{0FB923BB-BC1E-4955-BC46-DA295FCB7ACA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,8 @@ Global
 		{E2E5225C-CFB2-49FF-8B34-DB68C53711E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8FE88901-C363-42DB-8024-89E7A4E22022}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8FE88901-C363-42DB-8024-89E7A4E22022}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FB923BB-BC1E-4955-BC46-DA295FCB7ACA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FB923BB-BC1E-4955-BC46-DA295FCB7ACA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

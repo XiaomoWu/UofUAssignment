@@ -28,7 +28,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="cky-prob.trace" />
-    <Content Include="cky.trace" />
     <Content Include="pcfg.txt" />
     <Content Include="sentences.txt" />
   </ItemGroup>

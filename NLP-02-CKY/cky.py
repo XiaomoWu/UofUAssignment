@@ -94,6 +94,10 @@ class CKY():
                         o = ' '.join(o)
                     else:
                         o = ' '.join(sorted(['%s ' % (self._remove_position(i['left'])) for i in chart.iloc[r, c]]))
+                # remove additional white spaces
+                o = ' '.join(o.split())
+                if len(o) == 0:
+                    o = '-'
                 print('cell[%s,%s]: %s' % (r, c, o))
         print()
 
