@@ -260,3 +260,6 @@ paket-files/
 __pycache__/
 *.pyc
 *.csv
+/ML-03-movie/data/raw-data
+/ML-03-movie/data
+/ML-03-movie/Learning word vectors for sentiment analysis.pdf

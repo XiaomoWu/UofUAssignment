@@ -1,0 +1,35 @@
+serum noun ROOT=serum SOURCE=default
+
+dark adjective ROOT=dark SOURCE=dictionary
+
+mice noun ROOT=mouse SOURCE=dictionary
+
+immature adjective ROOT=mature SOURCE=morphology
+
+preview verb ROOT=view SOURCE=morphology
+
+darkness noun ROOT=dark SOURCE=morphology
+
+talking verb ROOT=talk SOURCE=morphology
+
+irrelevant adjective ROOT=relevant SOURCE=morphology
+
+talks noun ROOT=talk SOURCE=morphology
+talks verb ROOT=talk SOURCE=morphology
+
+dislike noun ROOT=like SOURCE=morphology
+dislike verb ROOT=like SOURCE=morphology
+
+previewing verb ROOT=view SOURCE=morphology
+
+semiunilateral adjective ROOT=lateral SOURCE=morphology
+
+friendships noun ROOT=friend SOURCE=morphology
+
+lovers noun ROOT=love SOURCE=morphology
+
+mover noun ROOT=move SOURCE=morphology
+
+unilaterally adverb ROOT=lateral SOURCE=morphology
+
+disproportionately adverb ROOT=proportion SOURCE=morphology

@@ -5,8 +5,7 @@
     <ProjectGuid>e2e5225c-cfb2-49ff-8b34-db68c53711e2</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>
-    </StartupFile>
+    <StartupFile>morphology.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>

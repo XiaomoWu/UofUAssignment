@@ -11,6 +11,8 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "NLP-02-CKY", "NLP-02-CKY\NL
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ML-02-Perceptron", "ML-02-Perceptron\ML-02-Perceptron.pyproj", "{0FB923BB-BC1E-4955-BC46-DA295FCB7ACA}"
 EndProject
+Project("{DA7A21FA-8162-4350-AD77-A8D1B671F3ED}") = "ML-03-movie", "ML-03-movie\ML-03-movie.rxproj", "{134DC768-5D2C-4A1E-A516-9AA428D16391}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{8FE88901-C363-42DB-8024-89E7A4E22022}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0FB923BB-BC1E-4955-BC46-DA295FCB7ACA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0FB923BB-BC1E-4955-BC46-DA295FCB7ACA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{134DC768-5D2C-4A1E-A516-9AA428D16391}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{134DC768-5D2C-4A1E-A516-9AA428D16391}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{134DC768-5D2C-4A1E-A516-9AA428D16391}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{134DC768-5D2C-4A1E-A516-9AA428D16391}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

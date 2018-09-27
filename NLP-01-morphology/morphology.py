@@ -74,9 +74,10 @@ class PARSER:
                 if pos_pred == pos:
                     # IN dict
                     dict_match = self._search_dict(word_new)
-                    if dict_match:
+                    if dict_match :
                         for d in dict_match:
-                            self.output.add('%s %s ROOT=%s SOURCE=%s' % (word_input, pos_input, word_new, 'morphology'))
+                            if d['pos'] == pos_new:
+                                self.output.add('%s %s ROOT=%s SOURCE=%s' % (word_input, pos_input, word_new, 'morphology'))
                             
                     # NOT in dict
                     else:
@@ -160,10 +161,11 @@ class PARSER:
             self.output = [o for o in output if o.find('SOURCE=default') < 0]
 
 
-path = 'C:/Users/Yu Zhu/OneDrive/Academy/the U/Assignment/AssignmentSln/NLP-02-morphology/'
+path = 'C:/Users/Yu Zhu/OneDrive/Academy/the U/Assignment/AssignmentSln/NLP-01-morphology/test cases (answer)/'
 
-x = PARSER(path + 'dict.txt', path + 'rules.txt', path + 'small_test.txt')
+x = PARSER(path + 'test-dict.txt', path + 'test-rules.txt', path + 'test-test.txt')
 x.parse()
+#x.parse_one('lovers')
 
 
 #if __name__ == '__main__':

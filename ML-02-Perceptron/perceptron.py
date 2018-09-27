@@ -1,9 +1,9 @@
 from collections import OrderedDict
+from copy import deepcopy
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
-import copy
 
 dir = "C:/Users/Yu Zhu/OneDrive/Academy/the U/Assignment/AssignmentSln/ML-02-Perceptron/dataset/"
 os.chdir(dir)
@@ -13,7 +13,7 @@ class Perceptron:
         pass
 
     # train 
-    def train(self, train_fpath = None, train_data = None, type = 'simple', eta = 1, init_weight = 'random', margin = 0, epoch_n = 1):
+    def train(self, train_fpath = None, train_data = None, type = 'simple', eta = 1, init_weight = 'random', margin = 0, epoch_n = 1, verbose = True):
         # import training set
         if train_data is None:
             self.feature_n, self.train_data_n, self.train_data = self._get_data(train_fpath)
@@ -27,17 +27,15 @@ class Perceptron:
 
         # train perceptron
         if type == 'simple':
-            self.weight = self._train_simple(w_0, b_0, eta = eta, epoch_n = epoch_n)
-
-
+            self.weight = self._train_simple(w_0, b_0, eta = eta, epoch_n = epoch_n, verbose = verbose)
         elif type == 'decay':
-            self.weight = self._train_decay(w_0, b_0, eta = eta, epoch_n = epoch_n)
+            self.weight = self._train_decay(w_0, b_0, eta = eta, epoch_n = epoch_n, verbose = verbose)
         elif type == 'margin':
-            self.weight = self._train_margin(w_0, b_0, eta = eta, margin = margin, epoch_n = epoch_n)
+            self.weight = self._train_margin(w_0, b_0, eta = eta, margin = margin, epoch_n = epoch_n, verbose = verbose)
         elif type == 'average':
-            self.weight = self._train_average(w_0, b_0, eta = eta, epoch_n = epoch_n)
+            self.weight = self._train_average(w_0, b_0, eta = eta, epoch_n = epoch_n, verbose = verbose)
         elif type == 'aggresive':
-            self.weight = self._train_aggresive(w_0, b_0, margin = margin, epoch_n = epoch_n)
+            self.weight = self._train_aggresive(w_0, b_0, margin = margin, epoch_n = epoch_n, verbose = verbose)
         #return self.weight
 
     # test perceptron
@@ -75,7 +73,7 @@ class Perceptron:
         return acc
             
     # cross validation
-    def cv(self, type, init_weight, eta = None, test_type = None, margin = None, epoch_n = 2):
+    def cv(self, type, init_weight, eta = None, test_type = None, margin = None, epoch_n = 10, verbose = False):
         cv1 = self._get_data('CVSplits/training00.data')[2] # 150
         cv2 = self._get_data('CVSplits/training01.data')[2] # 150
         cv3 = self._get_data('CVSplits/training02.data')[2] # 150
@@ -84,52 +82,33 @@ class Perceptron:
 
         cv = [cv1, cv2, cv3, cv4, cv5]
 
-        accuracy = []
-        for i in [0]:
-        #for i in range(5):
-            cv_temp = copy.deepcopy(cv)
+        cv_acc = []
+        for i in range(5):
+            cv_temp = deepcopy(cv)
             test = cv_temp.pop(i)
             train = cv_temp
             train = pd.concat(train, ignore_index = True)
 
             # train epoch_n times
-            self.train(train_data = train, type = type, eta = eta, init_weight = init_weight, margin = margin, epoch_n = epoch_n)
+            self.train(train_data = train, type = type, eta = eta, init_weight = init_weight, margin = margin, epoch_n = epoch_n, verbose = verbose)
 
-            """
-            with open('cv.weight.data', 'w') as f:
-                f.write(str(self.weight))
+            # test on the fifth fold
+            weight = self.weight[-1]
+            acc = self.test(test_data = test, weight = weight, test_type = test_type)
+            print('CV %s, acc: %1.4f' % (i, acc))
 
-
-            # extract the weight at the end of each epoch, run test
-
-            acc_list = []
-            for epoch in range(1, epoch_n + 1):
-                w, b = [(w['w'], w['b']) for w in self.weight if w['epoch'] == epoch][-1]
-                if test_type == 'average':
-                    w, b = [(w['a'], w['ba']) for w in self.weight if w['epoch'] == epoch][-1]
-                weight = {'w': w, 'b': b}
-                print(weight)
-                acc = self.test(test_data = test, weight = weight)
-                acc_list.append(acc)
-                print('CV %s Epoch %s, acc: %1.4f' % (i, epoch, acc))
-
-
-            acc = self.test(test_data = test, test_type = test_type)
-            accuracy.append(acc)
-
+            cv_acc.append(acc)
         
-        accuracy_avg = np.mean(accuracy)
-        #print('CV %s, avg acc: %1.4f \n' % (i, accuracy_avg))
-        return np.mean(accuracy_avg)
-        """
+        avg_cv_acc = np.mean(cv_acc)
+        print('Avg acc: %1.4f \n' % (avg_cv_acc))
+        return np.mean(avg_cv_acc)
 
 
     # Simple perceptron
-    def _train_simple(self, w_0, b_0, eta, epoch_n):
-        w = copy.deepcopy(w_0) # w_0 is an array (mutable)
+    def _train_simple(self, w_0, b_0, eta, epoch_n, verbose):
+        w = deepcopy(w_0) # w_0 is an array (mutable)
         b = b_0 # b is a float (immutable)
-        weight_list = [{'epoch': 1, 't': 0, 'mistake_n': 0, 'w': copy.deepcopy(w), 'b': b}]
-        weight_df = pd.DataFrame({'epoch': 1, 't': 0, 'w_old': copy.deepcopy(w_0), 'w_new': None, 'b_old': b_0, 'b_new': None, 'x': None, 'y': None, 'y_pred': None, })
+        weight_list = [{'epoch': 1, 't': 0, 'mistake_n': 0, 'w': deepcopy(w), 'b': b}]
 
 
         for epoch in range(1, epoch_n + 1):
@@ -137,7 +116,6 @@ class Perceptron:
             mistake_n = 0
             index = [i for i in range(self.train_data_n)]
 
-            np.random.seed(epoch)
             np.random.shuffle(index)
 
             for i in index:
@@ -145,140 +123,142 @@ class Perceptron:
                 y_i = self.train_data.iloc[i, 0]
                 x_i = np.array(self.train_data.iloc[i, 1:])        
                 
-                w_old = copy.deepcopy(w)
-                b_old = copy.deepcopy(b)
-
                 y_pred = 1 if np.dot(x_i, w) >= 0 else -1
 
                 if y_i * y_pred <= 0:
                     mistake_n += 1
                     w += eta * y_i * x_i
                     b += eta * y_i
-                    #"""
-                    w_new = copy.deepcopy(w)
-                    b_new = copy.deepcopy(b)
 
-                weight_df_new = pd.DataFrame({'epoch': epoch, 't': t, 'w_old': w_old, 'w_new': w_new, 'b_old': b_old, 'b_new': b_new, 'x': x_i, 'y': y_i, 'y_pred': y_pred})
+                weight_list.append({'epoch': epoch, 't': t, 'mistake_n': mistake_n, 'w': deepcopy(w), 'b': deepcopy(b)})
+            if verbose == True:
+                print('Train epoch: %s, Mistake #: %s' % (epoch, mistake_n))
 
-                weight_df = pd.concat([weight_df, weight_df_new])
-                #"""
-                weight_list.append({'epoch': epoch, 't': t, 'mistake_n': mistake_n, 'w': copy.deepcopy(w), 'b': copy.deepcopy(b)})
-            print('Train epoch: %s, Mistake #: %s' % (epoch, mistake_n))
-
-        with open('weight.list', 'w') as f:
-            f.write(str(weight_list))
-
-        weight_df.to_csv('weight.csv', index = False)
         return weight_list
 
     # Decaying perceptron
-    def _train_decay(self, w_0, b_0, eta, epoch_n):
-        w = w_0
+    def _train_decay(self, w_0, b_0, eta, epoch_n, verbose):
+        w = deepcopy(w_0)
         b = b_0
-        weight_list = []
-        index = [i for i in range(self.train_data_n)]
-        np.random.shuffle(index)
-        for i in index:
+        weight_list = [{'epoch': 1, 't': 0, 'mistake_n': 0, 'w': deepcopy(w), 'b': b}]
+
+        for epoch in range(1, epoch_n + 1):
             t = 0
             mistake_n = 0
-            for i in range(self.train_data_n):
+            index = [i for i in range(self.train_data_n)]
+
+            np.random.shuffle(index)
+
+            for i in index:
                 t += 1
                 y_i = self.train_data.iloc[i, 0]
                 x_i = self.train_data.iloc[i, 1:]           
+                y_pred = 1 if np.dot(x_i, w) >= 0 else -1
 
-                if y_i * np.dot(x_i, w) <= 0:
+
+                if y_i * y_pred <= 0:
                     mistake_n += 1
                     w += (eta / t) * y_i * x_i
                     b += (eta / t) * y_i
 
-                weight_list.append({'epoch': epoch, 't': t, 'mistake_n': mistake_n, 'w': w, 'b': b})
-            #print('Train epoch: %s, Mistake #: %s' % (epoch, mistake_n))
+                weight_list.append({'epoch': epoch, 't': t, 'mistake_n': mistake_n, 'w': deepcopy(w), 'b': deepcopy(b)})
+            if verbose == True:
+                print('Train epoch: %s, Mistake #: %s' % (epoch, mistake_n))
+
         return weight_list
 
     
     # margin perceptron
-    def _train_margin(self, w_0, b_0, eta, margin, epoch_n):
+    def _train_margin(self, w_0, b_0, eta, margin, epoch_n, verbose):
         w = w_0
         b = b_0
-        weight_list = []
+        weight_list = [{'epoch': 1, 't': 0, 'mistake_n': 0, 'w': deepcopy(w), 'b': b}]
 
         for epoch in range(1, epoch_n + 1):
             t = 0
             mistake_n = 0
-
             index = [i for i in range(self.train_data_n)]
             np.random.shuffle(index)
+
             for i in index:
                 t += 1
                 y_i = self.train_data.iloc[i, 0]
                 x_i = self.train_data.iloc[i, 1:]           
+                y_pred = 1 if np.dot(x_i, w) >= 0 else -1
 
-                if y_i * np.dot(x_i, w) <= margin:
+                if y_i * y_pred <= margin:
                     mistake_n += 1
                     w += (eta / t) * y_i * x_i
                     b += (eta / t) * y_i
 
-                weight_list.append({'epoch': epoch, 't': t, 'mistake_n': mistake_n, 'w': w, 'b': b})
-            #print('Train epoch: %s, Mistake #: %s' % (epoch, mistake_n))
+                weight_list.append({'epoch': epoch, 't': t, 'mistake_n': mistake_n, 'w': deepcopy(w), 'b': deepcopy(b)})
+
+            if verbose == True:
+                print('Train epoch: %s, Mistake #: %s' % (epoch, mistake_n))
         return weight_list
 
     # average perceptron
-    def _train_average(self, w_0, b_0, eta, epoch_n):
-        w = w_0
-        b = b_0
+    def _train_average(self, w_0, b_0, eta, epoch_n, verbose):
+        w = deepcopy(w_0) 
+        b = b_0 
 
-        a = w_0
+        a = deepcopy(w_0)
         ba = b_0
-        weight_list = []
+        weight_list = [{'epoch': 1, 't': 0, 'mistake_n': 0, 'w': deepcopy(w), 'b': b, 'a': 0, 'ba': 0}]
 
         for epoch in range(1, epoch_n + 1):
             t = 0
             mistake_n = 0
-
             index = [i for i in range(self.train_data_n)]
+
             np.random.shuffle(index)
+
             for i in index:
                 t += 1
                 y_i = self.train_data.iloc[i, 0]
                 x_i = self.train_data.iloc[i, 1:]      
+                y_pred = 1 if np.dot(x_i, w) >= 0 else -1
             
-                if y_i * np.dot(x_i, w) <= 0:
+                if y_i * y_pred <= 0:
                     mistake_n += 1
                     w += eta * y_i * x_i
                     b += eta * y_i
 
                 a += w
                 ba += b
-                weight_list.append({'epoch': epoch, 't': t, 'mistake_n': mistake_n, 'w': w, 'b': b, 'a': a, 'ba': ba})
-            #print('Train epoch: %s, Mistake #: %s' % (epoch, mistake_n))
+                weight_list.append({'epoch': epoch, 't': t, 'mistake_n': mistake_n, 'w': deepcopy(w), 'b': b, 'a': deepcopy(a), 'ba': ba})
+            if verbose == True:
+                print('Train epoch: %s, Mistake #: %s' % (epoch, mistake_n))
         return weight_list
 
     # aggresive perceptron
-    def _train_aggresive(self, w_0, b_0, margin, epoch_n):
-        w = w_0
+    def _train_aggresive(self, w_0, b_0, margin, epoch_n, verbose):
+        w = deepcopy(w_0) 
         b = b_0
-
-        weight_list = []
+        weight_list = [{'epoch': 1, 't': 0, 'mistake_n': 0, 'w': deepcopy(w), 'b': b}]
 
         for epoch in range(1, epoch_n + 1):
             t = 0
             mistake_n = 0
-
             index = [i for i in range(self.train_data_n)]
+
             np.random.shuffle(index)
+
             for i in index:
                 t += 1
                 y_i = self.train_data.iloc[i, 0]
                 x_i = self.train_data.iloc[i, 1:]      
+                y_pred = 1 if np.dot(x_i, w) >= 0 else -1
             
-                if y_i * np.dot(x_i, w) <= margin:
+                if y_i * y_pred <= margin:
                     mistake_n += 1
                     eta = (margin - y_i * np.dot(w, x_i)) / (np.dot(x_i, x_i) + 1)
                     w += eta * y_i * x_i
                     b += eta * y_i
 
-                weight_list.append({'epoch': epoch, 't': t, 'mistake_n': mistake_n, 'w': w, 'b': b})
-            #print('Train epoch: %s, Mistake #: %s' % (epoch, mistake_n))
+                weight_list.append({'epoch': epoch, 't': t, 'mistake_n': mistake_n, 'w': deepcopy(w), 'b': deepcopy(b)})
+            if verbose == True:
+                print('Train epoch: %s, Mistake #: %s' % (epoch, mistake_n))
         return weight_list
 
     # OUTPUT: a dict with keys of "w" and "b". 
@@ -289,7 +269,6 @@ class Perceptron:
             b = 0
             return w, b
         elif type == 'random':
-            np.random.seed(42)
             w_and_b = 0.02 * np.random.random_sample(n + 1, ) - 0.01
             w = w_and_b[:-1]
             b = w_and_b[-1]
@@ -355,49 +334,47 @@ class Perceptron:
 # demo
 p = Perceptron()
 """
-p.train(train_fpath = 'diabetes.train', eta = 1, type = 'simple', init_weight = 'random', epoch_n = 1)
-p.test('diabetes.test')
-p.plot()
-"""
-
-
 # CV: simple
 # pick eta == 0.01
-acc = []
-for eta in [1]:
-    print('Learning rate: %s' % eta)
-    acc.append(p.cv(type = 'simple', eta = eta, init_weight = 'random'))
-"""
-
-# CV: decay
-# pick eta == 0.01
-acc = []
+np.random.seed(42)
 for eta in [1, 0.1, 0.01]:
     print('Learning rate: %s' % eta)
-    acc.append(p.cv(type = 'decay', eta = eta, init_weight = 'random'))
+    p.cv(type = 'simple', eta = eta, init_weight = 'random')
+# CV: decay
+# pick eta == 0.01
+np.random.seed(42)
+for eta in [1, 0.1, 0.01]:
+    print('Learning rate: %s' % eta)
+    p.cv(type = 'decay', eta = eta, init_weight = 'random')
 
 # CV: margin
-# pick eta == ?
-acc = []
+np.random.seed(42)
 for eta in [1, 0.1, 0.01]:
     for margin in [1, 0.1, 0.01]:
         print('Learning rate: %s' % eta)
         print('Margin: %s' % margin)
-        acc.append(p.cv(type = 'margin', eta = eta, margin = margin, init_weight = 'random'))
+        p.cv(type = 'margin', eta = eta, margin = margin, init_weight = 'random')
 
 # CV: average
-# pick eta == ?
-acc = []
+np.random.seed(42)
 for eta in [1, 0.1, 0.01]:
     print('Learning rate: %s' % eta)
-    acc.append(p.cv(type = 'average', test_type = 'average', eta = eta, init_weight = 'random'))
-
+    p.cv(type = 'average', test_type = 'average', eta = eta, init_weight = 'random')
 
 # CV: aggresive
-# pick eta == 0
-acc = []
+np.random.seed(42)
 for margin in [1, 0.1, 0.01]:
     print('margin: %s' % margin)
-    acc.append(p.cv(type = 'aggresive', margin = margin, init_weight = 'random'))
+    p.cv(type = 'aggresive', margin = margin, init_weight = 'random')
 
+# Number of Updates
+np.random.seed(42)
+p.train(train_fpath = 'diabetes.train', eta = 1, type = 'simple', init_weight = 'random', epoch_n = 20)
+p.train(train_fpath = 'diabetes.train', eta = 0.01, type = 'decay', init_weight = 'random', epoch_n = 20)
+p.train(train_fpath = 'diabetes.train', eta = 1, margin = 0.01, type = 'margin', init_weight = 'random', epoch_n = 20)
+print(np.sum([w['mistake_n'] for w in p.weight if w['t'] == 750]))
+
+p.train(train_fpath = 'diabetes.train', eta = 0.1, type = 'average', init_weight = 'random', epoch_n = 20)
+p.train(train_fpath = 'diabetes.train', eta = 0.1, type = 'aggresive', init_weight = 'random', epoch_n = 20)
 """
+
