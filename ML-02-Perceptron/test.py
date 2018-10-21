@@ -1,4 +1,7 @@
-# demo
-p = Perceptron()
+l = [1, 2, 3]
 
-p.cv(type = 'simple', eta = 1, init_weight = 'random')
+def f(x):
+    x *= 3
+
+f(l)
+l

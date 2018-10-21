@@ -1,4 +1,5 @@
 import sys
+import re
 import getopt
 import numpy as np
 import pandas as pd
@@ -107,7 +108,11 @@ class CKY():
         #fpath = 'sentences.txt'
         with open(fpath) as f:
             lines = f.readlines()
-        sentence_list = [line.strip().split() for line in lines]
+        sentence_list = []
+        for line in lines:
+            m = re.search(r'[\w\s]+', line)
+            sentence = m.group().strip().split()
+            sentence_list.append(sentence)
         return sentence_list
 
 
@@ -158,9 +163,9 @@ class CKY():
 #dir_path = 'C:/Users/Yu Zhu/OneDrive/Academy/the U/Assignment/AssignmentSln/NLP-02-CKY/'
 #os.chdir(dir_path)
 
-#cky = CKY()
-#cky.parse(prob = 'prob', verbose = 'verbose')
-#cky.parse(prob = 'prob')
+#cky = CKY(pcfg = 'pcfg-debug.txt', sentences = 'sentences-debug.txt')
+##cky.parse(prob = 'prob', verbose = 'verbose')
+#cky.parse()
 
 if __name__ == '__main__':
     args = sys.argv[1:]

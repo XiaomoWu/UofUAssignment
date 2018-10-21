@@ -5,7 +5,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 
-dir = "C:/Users/Yu Zhu/OneDrive/Academy/the U/Assignment/AssignmentSln/ML-02-Perceptron/dataset/"
+dir = "C:/Users/rossz/OneDrive/Academy/the U/Assignment/AssignmentSln/ML-02-Perceptron/dataset/"
 os.chdir(dir)
 
 class Perceptron:
@@ -13,7 +13,7 @@ class Perceptron:
         pass
 
     # train 
-    def train(self, train_fpath = None, train_data = None, type = 'simple', eta = 1, init_weight = 'random', margin = 0, epoch_n = 1, verbose = True):
+    def train(self, train_fpath = None, train_data = None, type = 'simple', test_type = None, eta = 1, init_weight = 'random', margin = 0, epoch_n = 1, verbose = True, train_on_eval =  False):
         # import training set
         if train_data is None:
             self.feature_n, self.train_data_n, self.train_data = self._get_data(train_fpath)
@@ -36,7 +36,14 @@ class Perceptron:
             self.weight = self._train_average(w_0, b_0, eta = eta, epoch_n = epoch_n, verbose = verbose)
         elif type == 'aggresive':
             self.weight = self._train_aggresive(w_0, b_0, margin = margin, epoch_n = epoch_n, verbose = verbose)
-        #return self.weight
+
+        if train_on_eval:
+            epoch_weight = [w for w in self.weight if w['t'] == 750]
+            test_data = self._get_data('diabetes.dev')[2]
+            for i in range(epoch_n):
+                acc = self.test(test_data = test_data, weight = epoch_weight[i], test_type = test_type)
+                print('Epoch %s, acc %1.3f' % (i+1, acc))
+
 
     # test perceptron
     def test(self, test_fpath = None, test_data = None, weight = None, test_type = None):
@@ -158,8 +165,8 @@ class Perceptron:
 
                 if y_i * y_pred <= 0:
                     mistake_n += 1
-                    w += (eta / t) * y_i * x_i
-                    b += (eta / t) * y_i
+                    w += (eta / mistake_n) * y_i * x_i
+                    b += (eta / mistake_n) * y_i
 
                 weight_list.append({'epoch': epoch, 't': t, 'mistake_n': mistake_n, 'w': deepcopy(w), 'b': deepcopy(b)})
             if verbose == True:
@@ -188,8 +195,8 @@ class Perceptron:
 
                 if y_i * y_pred <= margin:
                     mistake_n += 1
-                    w += (eta / t) * y_i * x_i
-                    b += (eta / t) * y_i
+                    w += (eta / mistake_n) * y_i * x_i
+                    b += (eta / mistake_n) * y_i
 
                 weight_list.append({'epoch': epoch, 't': t, 'mistake_n': mistake_n, 'w': deepcopy(w), 'b': deepcopy(b)})
 
@@ -327,21 +334,25 @@ class Perceptron:
             weight = {'w': w, 'b': b}
             acc = self.test(test_data = test_data, weight = weight)
             acc_list.append(acc)
-            print('Plot Epoch: %s, Acc: %1.4f' % (epoch, acc))
-        plt.plot(acc_list)
+            #print('Plot Epoch: %s, Acc: %1.4f' % (epoch, acc))
+        plt.plot(range(1, epoch_n + 1), acc_list)
         plt.show()
 
 # demo
-p = Perceptron()
 """
+p = Perceptron()
+
+# get baseline accuracy
+p._get_data('diabetes.test')[2]['label'].value_counts()
+p._get_data('diabetes.dev')[2]['label'].value_counts()
+
 # CV: simple
-# pick eta == 0.01
 np.random.seed(42)
 for eta in [1, 0.1, 0.01]:
     print('Learning rate: %s' % eta)
     p.cv(type = 'simple', eta = eta, init_weight = 'random')
+
 # CV: decay
-# pick eta == 0.01
 np.random.seed(42)
 for eta in [1, 0.1, 0.01]:
     print('Learning rate: %s' % eta)
@@ -372,9 +383,33 @@ np.random.seed(42)
 p.train(train_fpath = 'diabetes.train', eta = 1, type = 'simple', init_weight = 'random', epoch_n = 20)
 p.train(train_fpath = 'diabetes.train', eta = 0.01, type = 'decay', init_weight = 'random', epoch_n = 20)
 p.train(train_fpath = 'diabetes.train', eta = 1, margin = 0.01, type = 'margin', init_weight = 'random', epoch_n = 20)
+p.train(train_fpath = 'diabetes.train', eta = 0.01, type = 'average', init_weight = 'random', epoch_n = 20)
+p.train(train_fpath = 'diabetes.train', eta = 0.01, type = 'aggresive', init_weight = 'random', epoch_n = 20)
 print(np.sum([w['mistake_n'] for w in p.weight if w['t'] == 750]))
 
-p.train(train_fpath = 'diabetes.train', eta = 0.1, type = 'average', init_weight = 'random', epoch_n = 20)
-p.train(train_fpath = 'diabetes.train', eta = 0.1, type = 'aggresive', init_weight = 'random', epoch_n = 20)
-"""
+# accuracy on develeopment
+np.random.seed(42)
+#p.train(train_fpath = 'diabetes.train', eta = 1, type = 'simple', init_weight = 'random', epoch_n = 20, train_on_eval = True, verbose = False)
+#p.train(train_fpath = 'diabetes.train', eta = 0.01, type = 'decay', init_weight = 'random', epoch_n = 20, train_on_eval = True, verbose = False)
+p.train(train_fpath = 'diabetes.train', eta = 1, margin = 0.01, type = 'margin', init_weight = 'random', epoch_n = 20, train_on_eval = True, verbose = False)
+#p.train(train_fpath = 'diabetes.train', eta = 0.01, type = 'average', init_weight = 'random', epoch_n = 20, train_on_eval = True, verbose = False, test_type = 'average')
+#p.train(train_fpath = 'diabetes.train', eta = 0.01, type = 'aggresive', init_weight = 'random', epoch_n = 20, train_on_eval = True, verbose = False)
 
+# accuracy on test
+np.random.seed(42)
+p.train(train_fpath = 'diabetes.train', eta = 1, type = 'simple', init_weight = 'random', epoch_n = 12, verbose = False)
+p.train(train_fpath = 'diabetes.train', eta = 0.01, type = 'decay', init_weight = 'random', epoch_n = 9, verbose = False)
+p.train(train_fpath = 'diabetes.train', eta = 1, margin = 0.01, type = 'margin', init_weight = 'random', epoch_n = 11, verbose = False)
+p.train(train_fpath = 'diabetes.train', eta = 0.01, margin = 0.01, type = 'average', init_weight = 'random', epoch_n = 9, verbose = False)
+p.train(train_fpath = 'diabetes.train', eta = 0.01, type = 'aggresive', init_weight = 'random', epoch_n = 12, verbose = False)
+print('%1.3f' % p.test(test_fpath = 'diabetes.test'))
+
+# plot epoch vs. acc
+np.random.seed(42)
+#p.train(train_fpath = 'diabetes.train', eta = 1, type = 'simple', init_weight = 'random', epoch_n = 20, verbose = False)
+#p.train(train_fpath = 'diabetes.train', eta = 0.01, type = 'decay', init_weight = 'random', epoch_n =20, verbose = False)
+#p.train(train_fpath = 'diabetes.train', eta = 1, margin = 0.01, type = 'margin', init_weight = 'random', epoch_n = 20)
+#p.train(train_fpath = 'diabetes.train', eta = 0.01, type = 'average', init_weight = 'random', epoch_n = 20)
+#p.train(train_fpath = 'diabetes.train', eta = 0.01, type = 'aggresive', init_weight = 'random', epoch_n = 20)
+#p.plot()
+"""

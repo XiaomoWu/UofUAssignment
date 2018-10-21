@@ -1,0 +1,25 @@
+S -> NP VP .1
+S -> VERB NP .1
+S -> X2 PP .1
+S -> VERB PP .1
+S -> VP PP .1
+S -> book .1
+VP -> VERB NP .1
+VP -> X2 PP .1
+X2 -> VERB NP .1
+VP -> VERB PP .1 
+VP -> VP PP .1
+VP -> book .1
+NP -> DET NOM .1 
+NP -> Houston .1
+NOM -> NOM NOUN .1 
+NOM -> NOM PP .1
+NOM -> book .1
+NOM -> flight .1 
+PP -> PREP NP .1
+DET -> the .1
+NOUN -> book .1 
+NOUN -> flight .1
+VERB -> book .1
+PREP -> to .1
+PROPER -> Houston .1

@@ -3,8 +3,8 @@
 - structure as follows:
 
 class CKY()
-    self.sentences: test file
-    self.pcfg: grammar file
+    self.sentences # test file
+    self.pcfg # grammar file
 
     def parse(): # method to parse all sentences
         for each sentence in sentences call self._parse_one()
@@ -18,7 +18,7 @@ class CKY()
 How to run？
 - from the .py file's directory, run "python cky.py pcfg.txt" or "python cky.py pcfg.txt -prob"
 
-Where did I text the program?
+Where did I test the program?
 - on CADE lab1-22
 
 Anything else?
