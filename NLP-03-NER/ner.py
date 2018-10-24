@@ -1,8 +1,3 @@
-'''
-1) "Perm , Russia", how to parse?
-2) exclude previous learnt rule from rules_temp
-'''
-
 import os
 import pandas as pd
 from copy import deepcopy
@@ -27,16 +22,24 @@ class NER:
     def train(self):
         train_data = self.train_data
         for iter in [1]:
-            # step 2
+            # step 2: initialization
             if iter == 1:
                 np_rules_temp = deepcopy(self.seed_rules)
                 self.np_rules = deepcopy(np_rules_temp)
             else:
                 np_rules_temp = self.np_rules.loc[self.np_rules['iter'] == (iter - 1)]
-            # step 3
+
+            np_rules_temp.to_csv('step2.csv', index = False)
+
+            # step 3: apply NP rules
             train_data = self._apply_rules(train_data, np_rules_temp, 'np')
-            # step 4, 5
+            
+            train_data.to_csv('step3.csv', index = False)
+
+            # step 4, 5: induce context rules
             context_rules_temp = self._induce_rules(train_data, 'context', iter)
+            context_rules_temp.to_csv('step4.csv', index = False)
+
             self.context_rules = pd.concat([self.context_rules, context_rules_temp], ignore_index = True)
 
             # print newly learned context rules
@@ -45,11 +48,15 @@ class NER:
                 (word, label, prob, freq) = context_rules_temp.loc[i, ['word', 'class', 'prob', 'freq']]
                 print('CONTEXT Contains(%s) -> %s (prob=%1.3f ; freq=%1.0f)' % (word, label, prob, freq))
 
-            # step 6
+            # step 6: apply context rules
             train_data = self._apply_rules(train_data, context_rules_temp, 'context')
-            # step 7
+            train_data.to_csv('step6.csv', index = False)
+
+            # step 7, 8: induce NP rules
             np_rules_temp = self._induce_rules(train_data, 'np', iter)
-            # step 8
+
+            np_rules_temp.to_csv('step7.csv', index = False)
+
             self.np_rules = pd.concat([self.np_rules, np_rules_temp], sort = False, ignore_index = True)
 
             # print newly learned np rules
@@ -75,38 +82,39 @@ class NER:
             rule_word = rules.loc[i, 'word']
             rule_class = rules.loc[i, 'class']
 
-            # for each instance in instances
+            # for each unlabeled instance
             for j in instances.index[instances['class'] == ''].tolist():
-                if instances.loc[j, 'class'] == '':
-                    np_or_context = instances.loc[j, type]
-                    if rule_word in np_or_context:
-                        instances.loc[j, 'class'] = rule_class
+                np_or_context = instances.loc[j, type]
+                if rule_word in np_or_context:
+                    instances.loc[j, 'class'] = rule_class
             
         return instances
 
     def _induce_rules(self, instances, type, iter = None):
-        rules = {}
+        rules = []
         labeled_instances = instances.loc[instances['class'] != '']
         if type == 'np':
             old_rule_words = (self.np_rules['word'].unique() if self.np_rules.shape[0] > 0 else [])
         elif type == 'context':
             old_rule_words = (self.context_rules['word'].unique() if self.context_rules.shape[0] > 0 else [])
 
-        for i in labeled_instances.index:
+        for i in labeled_instances.index.tolist():
             np_or_context = labeled_instances.loc[i, type]
             label = labeled_instances.loc[i, 'class']
             for word in np_or_context:
-                # exclude old rules
-                if word not in old_rule_words:
-                    if word not in rules:
-                        rules[word] = dict((k, 0) for k in self.unique_class)
-                        rules[word]['freq'] = 0
-                    rules[word][label] += 1
-                    rules[word]['freq'] += 1
+                if word not in old_rule_words: # exclude old rules
+                    if word not in [r['word'] for r in rules]: # initial new words
+                        d = dict((k, 0) for k in self.unique_class)
+                        d['word'] = word
+                        d['freq'] = 0
+                        rules.append(d)
+                    d = [r for r in rules if r['word'] == word][0]
+                    d[label] += 1
+                    d['freq'] += 1
                     for k in self.unique_class:
-                        prob = rules[word][k] / rules[word]['freq']
-                        rules[word].update({k + '_prob': prob})
-        df = pd.DataFrame(rules).transpose()
+                        prob = d[k] / d['freq']
+                        d[k + '_prob'] = prob
+        df = pd.DataFrame(rules)
 
         # select rules according to freq and prob
         induce_rules = []
@@ -114,7 +122,7 @@ class NER:
 
             d = df.loc[(df[k] >= self.freq) & (df[k + '_prob'] >= self.prob)]
             for i in d.index:
-                word = i
+                word = d.loc[i, 'word']
                 label = k
                 prob = d.loc[i, k + '_prob']
                 freq = d.loc[i, k]
@@ -123,7 +131,11 @@ class NER:
         df = pd.DataFrame(induce_rules)
 
         # sort & output rules
-        df = df.sort_values(by = ['class', 'prob', 'freq', 'word'], ascending = [True, False, False, True]).groupby('class').head(2).sort_values(by = ['prob', 'freq', 'word'], ascending = [False, False, True])
+        df = df.sort_values(by = ['class', 'prob', 'freq', 'word'], ascending = [True, False, False, True])
+
+        df.to_csv('induced_rules_full_%s.csv' % iter)
+        
+        df = df.groupby('class').head(2).sort_values(by = ['prob', 'freq', 'word'], ascending = [False, False, True])
 
         return df
 
@@ -134,11 +146,11 @@ class NER:
             for line in lines:
                 type1 = line.split('\n')[0].split(':')[0].strip().lower()
                 type1_arg = line.split('\n')[0].split(':')[1].strip().split(' ')
-                type1_arg = [t.strip() for t in type1_arg if t != ',']
+                type1_arg = [t.strip() for t in type1_arg]
                 
                 type2 = line.split('\n')[1].split(':')[0].strip().lower()
                 type2_arg = line.split('\n')[1].split(':')[1].strip().split(' ')
-                type2_arg = [t.strip() for t in type2_arg if t != ',']
+                type2_arg = [t.strip() for t in type2_arg]
                 train.append({type1: type1_arg, type2: type2_arg, 'class': ''})
 
         df = pd.DataFrame(train)
