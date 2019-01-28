@@ -263,3 +263,24 @@ __pycache__/
 /ML-03-movie/data/raw-data
 /ML-03-movie/data
 /ML-03-movie/Learning word vectors for sentiment analysis.pdf
+
+# My exclude folders
+.ipynb_checkpoints
+
+# My exclude files
+*.txt
+
+*.Rhistory
+*.Rdata
+data
+.pdf
+*.zip
+*.pkl
+*.feather
+*.gz
+*.tar
+*.joblib
+*.doc
+*.docx
+*.xls
+*.xlsx

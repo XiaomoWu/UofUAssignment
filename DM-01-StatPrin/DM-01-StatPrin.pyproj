@@ -2,15 +2,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>0fb923bb-bc1e-4955-bc46-da295fcb7aca</ProjectGuid>
+    <ProjectGuid>579245cb-73a6-46d9-8ba0-11390e37543f</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>perceptron.py</StartupFile>
+    <StartupFile>Q2.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>ML-02-Perceptron</Name>
-    <RootNamespace>ML-02-Perceptron</RootNamespace>
+    <Name>DM-01-StatPrin</Name>
+    <RootNamespace>DM-01-StatPrin</RootNamespace>
     <InterpreterId>Global|ContinuumAnalytics|Anaconda36-64</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -22,7 +22,8 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="perceptron.py" />
+    <Compile Include="Q1.py" />
+    <Compile Include="Q2.py" />
     <Compile Include="test.py">
       <SubType>Code</SubType>
     </Compile>

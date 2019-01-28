@@ -1,11 +1,9 @@
+import os, sys
 import numpy as np
 import pandas as pd
 import copy
 
 class ID3:
-
-    def __init__(self):
-        pass
     
     # train_id3: training with ID3
     def train_id3(self, data = None, fpath = '', max_depth = 500, verbose = True):
@@ -195,7 +193,7 @@ class ID3:
 
         return new_parent_tree
 
-data_dir = "C:/Users/Yu Zhu/OneDrive/Academy/the U/Assignment/AssignmentSln/ML-01-DT/"
+data_dir = "C:/Users/rossz/OneDrive/Academy/the U/Assignment/AssignmentSln/ML-01-DT/"
 tree = ID3()
 tree.train_id3(fpath = data_dir + 'train.csv')
-
+tree.test_id3(fpath = data_dir + 'test.csv')

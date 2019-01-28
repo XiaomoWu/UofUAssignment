@@ -2,16 +2,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>0fb923bb-bc1e-4955-bc46-da295fcb7aca</ProjectGuid>
+    <ProjectGuid>96d60df3-046d-41ba-ad3d-1faa5c2f6828</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>perceptron.py</StartupFile>
+    <StartupFile>Q1.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>ML-02-Perceptron</Name>
-    <RootNamespace>ML-02-Perceptron</RootNamespace>
-    <InterpreterId>Global|ContinuumAnalytics|Anaconda36-64</InterpreterId>
+    <Name>DM-02-SimHash</Name>
+    <RootNamespace>DM-02-SimHash</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,13 +21,10 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="perceptron.py" />
-    <Compile Include="test.py">
+    <Compile Include="Q1.py" />
+    <Compile Include="Q2.py">
       <SubType>Code</SubType>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <InterpreterReference Include="Global|ContinuumAnalytics|Anaconda36-64" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

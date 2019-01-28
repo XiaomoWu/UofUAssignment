@@ -1,0 +1,47 @@
+SEED DECISION LIST
+
+SPELLING Contains(Corp) -> ORGANIZATION (prob=-1.000 ; freq=-1)
+SPELLING Contains(Mr.) -> PERSON (prob=-1.000 ; freq=-1)
+
+ITERATION #1: NEW CONTEXT RULES
+
+CONTEXT Contains(President) -> ORGANIZATION (prob=1.000 ; freq=6)
+CONTEXT Contains(father) -> PERSON (prob=1.000 ; freq=5)
+
+ITERATION #1: NEW SPELLING RULES
+
+SPELLING Contains(XYZ) -> ORGANIZATION (prob=1.000 ; freq=6)
+SPELLING Contains(junior) -> PERSON (prob=1.000 ; freq=5)
+
+ITERATION #2: NEW CONTEXT RULES
+
+CONTEXT Contains(acquired) -> ORGANIZATION (prob=1.000 ; freq=6)
+CONTEXT Contains(musician) -> PERSON (prob=1.000 ; freq=5)
+
+ITERATION #2: NEW SPELLING RULES
+
+SPELLING Contains(Company) -> ORGANIZATION (prob=1.000 ; freq=6)
+
+ITERATION #3: NEW CONTEXT RULES
+
+
+ITERATION #3: NEW SPELLING RULES
+
+
+FINAL DECISION LIST
+
+SPELLING Contains(Corp) -> ORGANIZATION (prob=-1.000 ; freq=-1)
+SPELLING Contains(Mr.) -> PERSON (prob=-1.000 ; freq=-1)
+SPELLING Contains(XYZ) -> ORGANIZATION (prob=1.000 ; freq=6)
+SPELLING Contains(junior) -> PERSON (prob=1.000 ; freq=5)
+SPELLING Contains(Company) -> ORGANIZATION (prob=1.000 ; freq=6)
+CONTEXT Contains(President) -> ORGANIZATION (prob=1.000 ; freq=6)
+CONTEXT Contains(father) -> PERSON (prob=1.000 ; freq=5)
+CONTEXT Contains(acquired) -> ORGANIZATION (prob=1.000 ; freq=6)
+CONTEXT Contains(musician) -> PERSON (prob=1.000 ; freq=5)
+
+APPLYING FINAL DECISION LIST TO TEST INSTANCES
+
+CONTEXT: division of 
+NP: Gleason Inc 
+CLASS: NONE

@@ -1,0 +1,43 @@
+SEED DECISION LIST
+
+SPELLING Contains(Corp) -> ORGANIZATION (prob=-1.000 ; freq=-1)
+
+ITERATION #1: NEW CONTEXT RULES
+
+CONTEXT Contains(maker) -> ORGANIZATION (prob=1.000 ; freq=7)
+CONTEXT Contains(of) -> ORGANIZATION (prob=1.000 ; freq=7)
+
+ITERATION #1: NEW SPELLING RULES
+
+SPELLING Contains(BCD) -> ORGANIZATION (prob=1.000 ; freq=7)
+SPELLING Contains(Mr.) -> ORGANIZATION (prob=1.000 ; freq=7)
+
+ITERATION #2: NEW CONTEXT RULES
+
+CONTEXT Contains(software) -> ORGANIZATION (prob=1.000 ; freq=8)
+
+ITERATION #2: NEW SPELLING RULES
+
+SPELLING Contains(XYZ) -> ORGANIZATION (prob=1.000 ; freq=7)
+
+ITERATION #3: NEW CONTEXT RULES
+
+
+ITERATION #3: NEW SPELLING RULES
+
+
+FINAL DECISION LIST
+
+SPELLING Contains(Corp) -> ORGANIZATION (prob=-1.000 ; freq=-1)
+SPELLING Contains(BCD) -> ORGANIZATION (prob=1.000 ; freq=7)
+SPELLING Contains(Mr.) -> ORGANIZATION (prob=1.000 ; freq=7)
+SPELLING Contains(XYZ) -> ORGANIZATION (prob=1.000 ; freq=7)
+CONTEXT Contains(maker) -> ORGANIZATION (prob=1.000 ; freq=7)
+CONTEXT Contains(of) -> ORGANIZATION (prob=1.000 ; freq=7)
+CONTEXT Contains(software) -> ORGANIZATION (prob=1.000 ; freq=8)
+
+APPLYING FINAL DECISION LIST TO TEST INSTANCES
+
+CONTEXT: division of 
+NP: Gleason Inc 
+CLASS: ORGANIZATION

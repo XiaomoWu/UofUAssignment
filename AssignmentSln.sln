@@ -11,9 +11,15 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "NLP-02-CKY", "NLP-02-CKY\NL
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ML-02-Perceptron", "ML-02-Perceptron\ML-02-Perceptron.pyproj", "{0FB923BB-BC1E-4955-BC46-DA295FCB7ACA}"
 EndProject
-Project("{DA7A21FA-8162-4350-AD77-A8D1B671F3ED}") = "ML-03-movie", "ML-03-movie\ML-03-movie.rxproj", "{134DC768-5D2C-4A1E-A516-9AA428D16391}"
-EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "NLP-03-NER", "NLP-03-NER\NLP-03-NER.pyproj", "{8B896E87-8FE1-40B5-A2E5-5521870F3CC4}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ML-03-final-movie", "ML-03-final-movie\ML-03-final-movie.pyproj", "{10125AEC-4EA0-4974-815A-46C54216811A}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ML-04-Bayes", "ML-04-Bayes\ML-04-Bayes.pyproj", "{C4492F50-6CD0-4D3C-97B9-54345A2EF392}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "DM-01-StatPrin", "DM-01-StatPrin\DM-01-StatPrin.pyproj", "{579245CB-73A6-46D9-8BA0-11390E37543F}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "DM-02-SimHash", "DM-02-SimHash\DM-02-SimHash.pyproj", "{96D60DF3-046D-41BA-AD3D-1FAA5C2F6828}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,12 +35,16 @@ Global
 		{8FE88901-C363-42DB-8024-89E7A4E22022}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0FB923BB-BC1E-4955-BC46-DA295FCB7ACA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0FB923BB-BC1E-4955-BC46-DA295FCB7ACA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{134DC768-5D2C-4A1E-A516-9AA428D16391}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{134DC768-5D2C-4A1E-A516-9AA428D16391}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{134DC768-5D2C-4A1E-A516-9AA428D16391}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{134DC768-5D2C-4A1E-A516-9AA428D16391}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8B896E87-8FE1-40B5-A2E5-5521870F3CC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8B896E87-8FE1-40B5-A2E5-5521870F3CC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10125AEC-4EA0-4974-815A-46C54216811A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10125AEC-4EA0-4974-815A-46C54216811A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4492F50-6CD0-4D3C-97B9-54345A2EF392}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4492F50-6CD0-4D3C-97B9-54345A2EF392}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{579245CB-73A6-46D9-8BA0-11390E37543F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{579245CB-73A6-46D9-8BA0-11390E37543F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96D60DF3-046D-41BA-AD3D-1FAA5C2F6828}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96D60DF3-046D-41BA-AD3D-1FAA5C2F6828}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

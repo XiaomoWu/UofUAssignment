@@ -2,15 +2,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>0fb923bb-bc1e-4955-bc46-da295fcb7aca</ProjectGuid>
+    <ProjectGuid>10125aec-4ea0-4974-815a-46c54216811a</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>perceptron.py</StartupFile>
+    <StartupFile>run.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>ML-02-Perceptron</Name>
-    <RootNamespace>ML-02-Perceptron</RootNamespace>
+    <Name>ML-03-final-movie</Name>
+    <RootNamespace>ML-03-final-movie</RootNamespace>
     <InterpreterId>Global|ContinuumAnalytics|Anaconda36-64</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -22,10 +22,22 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="perceptron.py" />
+    <Compile Include="classifiers.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="cv.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="run.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="run_cv.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="test.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="utils.py" />
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="Global|ContinuumAnalytics|Anaconda36-64" />
